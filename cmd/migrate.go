@@ -1,8 +1,13 @@
 package cmd
 
 import (
+	"database/sql"
 	"log"
 
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +24,34 @@ var migrateCmd = &cobra.Command{
 }
 
 func migrateDb() error {
+	m, err := openConnection()
+	if err != nil {
+		return err
+	}
+	err = m.Up()
+	if err != nil {
+		return err
+	}
+	log.Println(m.Version())
+
 	return nil
+}
+
+func openConnection() (*migrate.Migrate, error) {
+	db, err := sql.Open(Conf.Dialect, Conf.ConnectionString)
+	if err != nil {
+		log.Printf("error when opening db connection: %v", err)
+		return nil, err
+	}
+	driver, _ := mysql.WithInstance(db, &mysql.Config{})
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://database/migrations",
+		"mysql", driver)
+
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func init() {

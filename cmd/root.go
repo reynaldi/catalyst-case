@@ -28,6 +28,11 @@ func init() {
 }
 
 func loadConfig() {
-	Conf.ConnectionString = os.Getenv("CONNECTION_STRING")
-	Conf.Dialect = os.Getenv("DIALECT")
+	log.Println(os.Getenv("CONNECTION_STRING"))
+	Conf = &config.Config{
+		ConnectionString: os.Getenv("CONNECTION_STRING"),
+		Dialect:          os.Getenv("DIALECT"),
+		AppPort:          os.Getenv("APP_PORT"),
+		AppHost:          os.Getenv("APP_HOST"),
+	}
 }
