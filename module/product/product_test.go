@@ -12,7 +12,7 @@ import (
 
 type productTestSuite struct {
 	suite.Suite
-	queryMock   *productQueryMock
+	queryMock   *ProductQueryMock
 	commandMock *productCommandMock
 	ctx         context.Context
 }
@@ -23,7 +23,7 @@ func TestProductTestSuite(t *testing.T) {
 
 func (p *productTestSuite) SetupTest() {
 	p.ctx = context.Background()
-	p.queryMock = new(productQueryMock)
+	p.queryMock = new(ProductQueryMock)
 	p.commandMock = new(productCommandMock)
 }
 

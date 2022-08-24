@@ -21,11 +21,33 @@ type OrderDetailEntity struct {
 	Qty           int     `db:"qty"`
 }
 
-type OrderRequest struct {
-	Items []OrderItem `json:"items"`
+type OrderWrap struct {
+	Order        OrderMasterEntity
+	OrderDetails []OrderDetailEntity
+}
+
+type OrderEntry struct {
+	Items     []OrderItem `json:"items"`
+	CreatedBy int         `json:"created_by"`
 }
 
 type OrderItem struct {
 	ProductId int `json:"product_id"`
 	Qty       int `json:"qty"`
+}
+
+type OrderDto struct {
+	OrderId    int              `json:"order_id"`
+	GrandTotal float64          `json:"grand_total"`
+	CreatedAt  time.Time        `json:"created_at"`
+	Items      []OrderDetailDto `json:"items"`
+	CreatedBy  int              `json:"created_by"`
+}
+
+type OrderDetailDto struct {
+	OrderDetailId int     `json:"order_detail_id"`
+	OrderId       int     `json:"order_id"`
+	ProductName   string  `json:"product_name"`
+	Qty           int     `json:"qty"`
+	UnitPrice     float64 `json:"unit_price"`
 }
