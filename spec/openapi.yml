@@ -1,0 +1,266 @@
+openapi: '3.0.2'
+info:
+  title: Catalyst Code Interview API
+  version: 0.1.0
+servers:
+  - url: http://localhost:4000/
+
+paths:
+  /brands:    
+    get:
+      tags:
+        - "Brands"
+      description: Return a list of brands
+      parameters:
+        - name: id
+          in: query
+          schema: 
+            type: integer
+          required: false
+          description: Brand ID
+      responses:
+        '200':
+          description: Successfully returned a list of brands
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/brandDto'
+    post:
+      tags:
+        - "Brands"
+      description: Create new brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newBrandDto'
+      responses:
+        '204':
+          description: Successfully create new brand
+  /products:
+    get:
+      tags:
+        - "Products"
+      description: Return brands
+      parameters:
+        - name: brand_id
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: Get products by brand id
+        - name: id
+          in: query
+          schema: 
+            type: integer
+          required: false
+          description: Get product by id
+      responses:
+        '200':
+          description: Successfully return brand/brand list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/productDto'
+    post:
+      tags:
+        - "Products"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newProductDto'
+      responses:
+        '204':
+          description: Successfully create new product
+  /customers:
+    get:
+      tags:
+        - "Customers"
+      description: Get a customer
+      parameters:
+        - name: id
+          in: query
+          schema: 
+            type: integer
+          required: false
+          description: Get a customer by ID
+        - name: email
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Get a customer by email
+      responses:
+        '200':
+          description: Successfully return a customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customerDto'
+    post:
+      tags:
+        - "Customers"
+      description: Create new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/newCustomerDto'
+      responses:
+        '204':
+          description: Successfully create new customer
+  /orders:
+    get:
+      tags:
+        - "Orders"
+      description: Get order/s 
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: Get order by id
+      responses:
+        '200':
+          description: Successfully return order/s
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderDto'
+    post:
+      tags:
+        - "Orders"
+      description: Create new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orderEntry'
+      responses:
+        '200':
+          description: Successfully create new order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderDto'
+
+components:
+  schemas:
+    brandDto:
+      type: object
+      properties:
+        brand_id:
+          type: integer
+        brand_name:
+          type: string
+    newBrandDto:
+      type: object
+      required:
+        - "brand_name"
+      properties:
+        brand_name:
+          type: string
+    productDto:
+      type: object
+      properties:
+        product_id: 
+          type: integer
+        brand_id:
+          type: integer
+        brand_name:
+          type: string
+        product_name:
+          type: string
+        price:
+          type: number
+        created_at:
+          type: string
+    newProductDto:
+      type: object
+      required:
+        - "brand_id"
+        - "product_name"
+        - "price"
+      properties:
+        brand_id:
+          type: integer
+        product_name:
+          type: string
+        price: 
+          type: number
+    customerDto:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+    newCustomerDto:
+      type: object
+      required:
+        - "email"
+      properties:
+        email:          
+          type: string
+        name: 
+          type: string
+    orderItem:
+      type: object
+      required:
+        - "product_id"
+        - "qty"
+      properties:
+        product_id:
+          type: integer
+        qty:
+          type: integer
+    orderEntry:
+      type: object
+      required:
+        - "created_by"
+        - "items"
+      properties:
+        created_by:
+          type: integer
+          description: Customer ID
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderItem'
+    orderDetailDto:
+      type: object
+      properties:
+        order_detail_id:
+          type: integer
+        order_id:
+          type: integer
+        product_name:
+          type: string
+        qty:
+          type: integer
+        unit_price:
+          type: number
+    orderDto:
+      type: object
+      properties:
+        order_id:
+          type: integer
+        grand_total:
+          type: number
+        created_at:
+          type: string
+        created_by: 
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderDetailDto'
+    

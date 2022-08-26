@@ -1,6 +1,6 @@
 version: '3'
 
-services:
+services:  
   database:
     image: mysql:5.7
     restart: always
@@ -26,11 +26,12 @@ services:
       retries: 10
     volumes:
       - my-db:/var/lib/mysql
-  migration:
+  migration:    
     depends_on:
       database:
         condition: service_healthy
     container_name: catalyst_case_migration
+    build: .
     image: catalyst:0.1.0
     command: migrate
   app:
@@ -42,6 +43,7 @@ services:
       - '4000:4000'
     expose:
       - '4000'
+    build: .
     image: catalyst:0.1.0
     command: serve
 
