@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	getBrandById = `SELECT * FROM brands WHERE brand_id = ? AND deleted_at IS NULL`
-	getAllBrands = `SELECT * FROM brands WHERE deleted_at IS NULL`
+	getBrandById = `SELECT brand_id, brand_name, created_at, deleted_at FROM brands WHERE brand_id = ? AND deleted_at IS NULL`
+	getAllBrands = `SELECT brand_id, brand_name, created_at, deleted_at FROM brands WHERE deleted_at IS NULL`
 )
 
 type brandQuery struct {

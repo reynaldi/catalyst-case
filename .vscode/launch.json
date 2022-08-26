@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceRoot}",
-            "args": ["serve"],
+            "args": ["migrate"],
             "env": {
                 "CONNECTION_STRING": "root:zxasqw12@tcp(localhost:3306)/c_db?charset=utf8mb4&parseTime=True&loc=Local&multiStatements=true",
                 "DIALECT": "mysql",

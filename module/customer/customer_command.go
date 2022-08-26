@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	addNewCustomer = `INSERT INTO customers (email, created_at) VALUES (?, ?)`
+	addNewCustomer = `INSERT INTO customers (email, name, created_at) VALUES (?, ?, ?)`
 )
 
 type customerCommand struct {
@@ -25,7 +25,7 @@ func NewCustomerCommand(db *database.DB) CustomerCommand {
 }
 
 func (c *customerCommand) AddCustomer(ctx context.Context, customer CustomerEntity) error {
-	res, e := c.ExecContext(ctx, addNewCustomer, customer.Email, customer.CreatedAt)
+	res, e := c.ExecContext(ctx, addNewCustomer, customer.Email, customer.Name, customer.CreatedAt)
 	if e != nil {
 		return e
 	}

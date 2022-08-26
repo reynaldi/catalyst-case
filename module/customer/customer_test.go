@@ -28,21 +28,21 @@ func (c *customerServiceTestSuite) SetupTest() {
 
 func (c *customerServiceTestSuite) TestAddNewCustomer_Error() {
 	c.commandMock.On("AddCustomer", c.ctx, mock.Anything).Return(errors.New("error add customer"))
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	var e = svc.AddNewCustomer(c.ctx, NewCustomerDto{})
 	c.EqualError(e, "error add customer")
 }
 
 func (c *customerServiceTestSuite) TestAddNewCustomer_Ok() {
 	c.commandMock.On("AddCustomer", c.ctx, mock.Anything).Return(nil)
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	var e = svc.AddNewCustomer(c.ctx, NewCustomerDto{})
 	c.Nil(e)
 }
 
 func (c *customerServiceTestSuite) TestGetById_ReturnError() {
 	c.queryMock.On("GetCustomerById", c.ctx, 1).Return(nil, errors.New("error get by id"))
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerById(c.ctx, 1)
 	c.Nil(res)
 	c.EqualError(e, "error get by id")
@@ -50,7 +50,7 @@ func (c *customerServiceTestSuite) TestGetById_ReturnError() {
 
 func (c *customerServiceTestSuite) TestGetById_ReturnCustomerNil() {
 	c.queryMock.On("GetCustomerById", c.ctx, 1).Return(nil, nil)
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerById(c.ctx, 1)
 	c.Nil(res)
 	c.Nil(e)
@@ -63,7 +63,7 @@ func (c *customerServiceTestSuite) TestGetById_ReturnOk() {
 		Name:       "test",
 	}
 	c.queryMock.On("GetCustomerById", c.ctx, 1).Return(expected, nil)
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerById(c.ctx, 1)
 	c.NotNil(res)
 	c.Equal(expected.Email, res.Email)
@@ -74,7 +74,7 @@ func (c *customerServiceTestSuite) TestGetById_ReturnOk() {
 func (c *customerServiceTestSuite) TestGetByEmail_ReturnError() {
 	var email = "test@mail.com"
 	c.queryMock.On("GetCustomerByEmail", c.ctx, email).Return(nil, errors.New("error get by email"))
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerByEmail(c.ctx, email)
 	c.Nil(res)
 	c.EqualError(e, "error get by email")
@@ -83,7 +83,7 @@ func (c *customerServiceTestSuite) TestGetByEmail_ReturnError() {
 func (c *customerServiceTestSuite) TestGetByEmail_ReturnCustomerNil() {
 	var email = "test@mail.com"
 	c.queryMock.On("GetCustomerByEmail", c.ctx, email).Return(nil, nil)
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerByEmail(c.ctx, email)
 	c.Nil(res)
 	c.Nil(e)
@@ -96,7 +96,7 @@ func (c *customerServiceTestSuite) TestGetByEmail_ReturnOk() {
 		Name:       "test",
 	}
 	c.queryMock.On("GetCustomerByEmail", c.ctx, expected.Email).Return(expected, nil)
-	var svc = NewCustomerService(c.queryMock, c.commandMock)
+	var svc = NewCustomer(c.queryMock, c.commandMock)
 	res, e := svc.GetCustomerByEmail(c.ctx, expected.Email)
 	c.NotNil(res)
 	c.Equal(expected.Email, res.Email)

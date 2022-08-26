@@ -39,6 +39,7 @@ func (c *customerQueryTestSuite) SetupTest() {
 	c.customerStructure = []string{
 		"customer_id",
 		"email",
+		"name",
 		"created_at",
 	}
 }
@@ -65,6 +66,7 @@ func (c *customerQueryTestSuite) TestGetCustomerById_ReturnOk() {
 		WillReturnRows(sqlmock.NewRows(c.customerStructure).AddRow(
 			1,
 			"test@mail.com",
+			"test",
 			time.Now().UTC(),
 		))
 	var query = NewCustomerQuery(c.db)
@@ -96,6 +98,7 @@ func (c *customerQueryTestSuite) TestGetCustomerByEmail_ReturnOk() {
 		WillReturnRows(sqlmock.NewRows(c.customerStructure).AddRow(
 			1,
 			"test@mail.com",
+			"test",
 			time.Now().UTC(),
 		))
 	var query = NewCustomerQuery(c.db)

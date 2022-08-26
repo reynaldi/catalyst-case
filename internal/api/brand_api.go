@@ -27,7 +27,7 @@ func (b *brandApi) getAllBrands(w http.ResponseWriter, r *http.Request) {
 	res, err := b.brand.GetAllBrands(r.Context())
 	if err != nil {
 		log.Println(err)
-		response.ResponseError(w, http.StatusNoContent, err)
+		response.ResponseError(w, http.StatusBadRequest, err)
 		return
 	}
 	response.ResponseWithJSON(w, http.StatusOK, res)
@@ -37,7 +37,7 @@ func (b *brandApi) getBrandById(w http.ResponseWriter, r *http.Request, brandId 
 	res, err := b.brand.GetBrandById(r.Context(), brandId)
 	if err != nil {
 		log.Println(err)
-		response.ResponseError(w, http.StatusNoContent, err)
+		response.ResponseError(w, http.StatusBadRequest, err)
 		return
 	}
 	response.ResponseWithJSON(w, http.StatusOK, res)
@@ -48,20 +48,20 @@ func (b *brandApi) postBrand(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&model)
 	if err != nil {
 		log.Println(err)
-		response.ResponseError(w, http.StatusNoContent, err)
+		response.ResponseError(w, http.StatusBadGateway, err)
 		return
 	}
 	validate := validator.New()
 	err = validate.Struct(model)
 	if err != nil {
 		log.Println(err)
-		response.ResponseError(w, http.StatusNoContent, err)
+		response.ResponseError(w, http.StatusBadRequest, err)
 		return
 	}
 	err = b.brand.AddNewBrand(r.Context(), *model)
 	if err != nil {
 		log.Println(err)
-		response.ResponseError(w, http.StatusNoContent, err)
+		response.ResponseError(w, http.StatusBadRequest, err)
 		return
 	}
 	response.ResponseWithNoContent(w)

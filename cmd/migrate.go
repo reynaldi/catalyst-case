@@ -26,10 +26,14 @@ var migrateCmd = &cobra.Command{
 func migrateDb() error {
 	m, err := openConnection()
 	if err != nil {
+		log.Println("open connection error")
+		log.Println(err)
 		return err
 	}
 	err = m.Up()
 	if err != nil {
+		log.Println("migration error")
+		log.Println(err)
 		return err
 	}
 	log.Println(m.Version())
@@ -43,12 +47,14 @@ func openConnection() (*migrate.Migrate, error) {
 		log.Printf("error when opening db connection: %v", err)
 		return nil, err
 	}
+	defer db.Close()
 	driver, _ := mysql.WithInstance(db, &mysql.Config{})
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://database/migrations",
 		"mysql", driver)
 
 	if err != nil {
+		log.Println("error create migration")
 		return nil, err
 	}
 	return m, nil

@@ -22,9 +22,9 @@ func NewOrderQuery(db *database.DB) OrderQuery {
 }
 
 const (
-	getOrders      = `SELECT * FROM orders ORDER BY created_at`
-	getOrderDetail = `SELECT * FROM order_details WHERE order_id = ?`
-	getOrder       = `SELECT * FROM orders WHERE order_id = ?`
+	getOrders      = `SELECT order_id, grand_total, created_at, created_by FROM orders ORDER BY created_at`
+	getOrderDetail = `SELECT order_detail_id, order_id, product_id, product_name, unit_price, qty FROM order_details WHERE order_id = ?`
+	getOrder       = `SELECT order_id, grand_total, created_at, created_by FROM orders WHERE order_id = ?`
 )
 
 func (o *orderQuery) GetOrders(ctx context.Context) ([]OrderWrap, error) {
@@ -84,7 +84,7 @@ func (o *orderQuery) wrapOrder(ctx context.Context, order OrderMasterEntity) (*O
 	defer det.Close()
 	for det.Next() {
 		var detail OrderDetailEntity
-		e = det.Scan(&detail.OrderDetailId, &detail.OrderId, &detail.ProductId, &detail.ProductName, &detail.Qty, &detail.UnitPrice)
+		e = det.Scan(&detail.OrderDetailId, &detail.OrderId, &detail.ProductId, &detail.ProductName, &detail.UnitPrice, &detail.Qty)
 		if e != nil {
 			return nil, e
 		}

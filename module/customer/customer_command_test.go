@@ -45,10 +45,11 @@ func (c *customerCommandTestSuite) SetupTest() {
 func (c *customerCommandTestSuite) TestAddCustomer_ExecError() {
 	var expectedEntity = CustomerEntity{
 		Email:     "test@mail.com",
+		Name:      "test",
 		CreatedAt: time.Now().UTC(),
 	}
 	c.mock.ExpectExec(regexp.QuoteMeta(addNewCustomer)).
-		WithArgs(expectedEntity.Email, expectedEntity.CreatedAt).
+		WithArgs(expectedEntity.Email, expectedEntity.Name, expectedEntity.CreatedAt).
 		WillReturnError(errors.New("new error"))
 	var command = NewCustomerCommand(c.db)
 	var res = command.AddCustomer(c.ctx, expectedEntity)
@@ -59,10 +60,11 @@ func (c *customerCommandTestSuite) TestAddCustomer_ExecError() {
 func (c *customerCommandTestSuite) TestAddCustomer_AffectedZero() {
 	var expectedEntity = CustomerEntity{
 		Email:     "test@mail.com",
+		Name:      "test",
 		CreatedAt: time.Now().UTC(),
 	}
 	c.mock.ExpectExec(regexp.QuoteMeta(addNewCustomer)).
-		WithArgs(expectedEntity.Email, expectedEntity.CreatedAt).
+		WithArgs(expectedEntity.Email, expectedEntity.Name, expectedEntity.CreatedAt).
 		WillReturnResult(sqlmock.NewResult(0, 0))
 	var command = NewCustomerCommand(c.db)
 	var res = command.AddCustomer(c.ctx, expectedEntity)
@@ -73,10 +75,11 @@ func (c *customerCommandTestSuite) TestAddCustomer_AffectedZero() {
 func (c *customerCommandTestSuite) TestAddCustomer_Ok() {
 	var expectedEntity = CustomerEntity{
 		Email:     "test@mail.com",
+		Name:      "test",
 		CreatedAt: time.Now().UTC(),
 	}
 	c.mock.ExpectExec(regexp.QuoteMeta(addNewCustomer)).
-		WithArgs(expectedEntity.Email, expectedEntity.CreatedAt).
+		WithArgs(expectedEntity.Email, expectedEntity.Name, expectedEntity.CreatedAt).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	var command = NewCustomerCommand(c.db)
 	var res = command.AddCustomer(c.ctx, expectedEntity)

@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	getCustomerById    = `SELECT * FROM customers WHERE customer_id = ?`
-	getCustomerByEmail = `SELECT * FROM customers WHERE email = ?`
+	getCustomerById    = `SELECT customer_id, email, name, created_at FROM customers WHERE customer_id = ?`
+	getCustomerByEmail = `SELECT customer_id, email, name, created_at FROM customers WHERE email = ?`
 )
 
 type customerQuery struct {
@@ -46,7 +46,7 @@ func (c *customerQuery) GetCustomerByEmail(ctx context.Context, email string) (*
 
 func ScanCustomer(row *sql.Row) (*CustomerEntity, error) {
 	var result CustomerEntity
-	e := row.Scan(&result.CustomerId, &result.Email, &result.CreatedAt)
+	e := row.Scan(&result.CustomerId, &result.Email, &result.Name, &result.CreatedAt)
 	if e != nil {
 		if e == sql.ErrNoRows {
 			return nil, nil

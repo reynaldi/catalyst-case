@@ -10,13 +10,13 @@ type customerService struct {
 	command CustomerCommand
 }
 
-type CustomerService interface {
+type Customer interface {
 	AddNewCustomer(ctx context.Context, customer NewCustomerDto) error
 	GetCustomerById(ctx context.Context, customerId int) (*CustomerDto, error)
 	GetCustomerByEmail(ctx context.Context, email string) (*CustomerDto, error)
 }
 
-func NewCustomerService(query CustomerQuery, command CustomerCommand) CustomerService {
+func NewCustomer(query CustomerQuery, command CustomerCommand) Customer {
 	return &customerService{
 		query:   query,
 		command: command,
